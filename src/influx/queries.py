@@ -1,3 +1,5 @@
+from trace import Trace
+
 from influxdb_client.client.flux_table import FluxRecord
 
 from src.influx import constants
@@ -6,7 +8,7 @@ from src.influx.constants import query_api, ORG
 
 class Queries:
     @staticmethod
-    def get_set(field: str, location: str, measurement: str = "esp32", timeframe: int = 3600, mean: int = 0) -> list[FluxRecord]:
+    def get_set(field: str, location: str, measurement: str = "esp32", timeframe: int = 3600, mean: int = 0, last:bool = False) -> list[FluxRecord]:
         if mean == 0:
             mean = 30
 
@@ -15,7 +17,8 @@ class Queries:
                  f'|> filter(fn:(r) => r._measurement == "{measurement}") '
                  f'|> filter(fn:(r) => r.location == "{location}") '
                  f'|> filter(fn:(r) => r._field == "{field}")'
-                 f'|> aggregateWindow(every: {mean}s, fn: mean)')
+                 f'|> aggregateWindow(every: {mean}s, fn: mean)'
+                 f'{'|> last()' if last is True else ''}')
 
         result = query_api.query(org=ORG, query=query)
 

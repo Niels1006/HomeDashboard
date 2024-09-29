@@ -16,7 +16,9 @@ class DataAPI(APIView):
         timeframe = int(request.GET.get("timeframe"))
         mean = int(request.GET.get("mean", 0))
 
-        points = Queries.get_set(field, location, measurement, timeframe, mean)
+        last = True if request.GET.get("last") is not None else False
+
+        points = Queries.get_set(field, location, measurement, timeframe, mean, last)
         results = [(p.get_time(), p.get_value()) for p in points]
 
         return Response(results, status=HTTP_202_ACCEPTED)
