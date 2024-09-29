@@ -46,8 +46,8 @@ REST_FRAMEWORK = {
 # CORS
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'http://192.168.178.31:5173',
-    'http://192.168.178.229:5173'
+    'http://192.168.178.31:12313',
+    'http://192.168.178.229:12313'
 ]
 CORS_ORIGIN_ALLOW_ALL = False
 
