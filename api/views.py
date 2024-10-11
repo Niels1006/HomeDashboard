@@ -18,7 +18,10 @@ class DataAPI(APIView):
 
         last = True if request.GET.get("last") is not None else False
 
-        points = Queries.get_set(field, location, measurement, timeframe, mean, last)
-        results = [(p.get_time(), p.get_value()) for p in points]
+        try:
+            points = Queries.get_set(field, location, measurement, timeframe, mean, last)
+            results = [(p.get_time(), p.get_value()) for p in points]
+        except ValueError:
+            results = [(0, 0)]
 
         return Response(results, status=HTTP_202_ACCEPTED)
